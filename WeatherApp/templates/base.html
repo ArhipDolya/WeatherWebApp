@@ -5,18 +5,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% block title %}
-
+        <title>Weather WebApp</title>
     {% endblock %}
     {% block link %}
-
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     {% endblock %}
-    
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{% url 'homepage' %}">Weather WebApp</a>
+        {% if user.is_authenticated  %}
+            <a class='nav-link' href="{% url 'weather' %}">Weather</a>
+        {% endif %}
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="navbar-text" style="color: #00FF00">You logged in as {{ user.username }}</span>
+                    </li>
+                {% endif %}                
 
-    {% block content %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'user_registration_view' %}">Register</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'user_login_view' %}">Login</a>
+                </li>
 
-    {% endblock %}
+                <li class='nax-item'>
+                    <a class='nav-link' href='{% url "logout_user_view" %}'>Logout</a>
+                </li>
+                
+            </ul>
+        </div>
+    </nav>
 
+    <div class="container">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-CLfZ6tuBo1jAWBzhwoRFX9OBnRDG4VgGsLqD+jgOzLkfwB6qIv2AM+L5zKXpR1DU" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>

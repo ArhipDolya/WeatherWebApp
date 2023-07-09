@@ -1,33 +1,40 @@
 {% extends 'base.html' %}
 {% load static %}
 
-    {% block title %}
-      <title>Weather WebApp</title>
-    {% endblock %}
-
-    {% block link %}
-      <link rel="stylesheet" href="{% static 'style.css' %}">
-    {% endblock %}
-
 {% block content %}
-<form method="post">
-    {% csrf_token %}
-    <input type="text" name="city1" placeholder="Enter a city 1">
-    <input type='text' name='city2' placeholder='Enter a city 2'>
-    <button type="submit">Compare Weather</button>
-</form>
+<br><br>
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="text" name="city1" class="form-control" placeholder="Enter a city 1">
+      </div>
+      <div class="form-group">
+        <input type="text" name="city2" class="form-control" placeholder="Enter a city 2">
+      </div>
+      <div class="form-group text-center">
+        <button type="submit" class="btn btn-primary">Compare Weather</button>
+      </div>
+    </form>
 
-<div class="comparison-container">
-    {% if weather_info1 %}
-      <div class="city-container">
-        {% include 'city.html' with weather_info=weather_info1 forecasts_info=forecasts_info1 %}
-      </div>
-    {% endif %}
-    {% if weather_info2 %}
-      <div class="city-container">
-        {% include 'city.html' with weather_info=weather_info2 forecasts_info=forecasts_info2 %}
-      </div>
-    {% endif %}
+  </div>
 </div>
+
+<div class="row justify-content-center">
+  <div class="col-md-6 d-flex justify-content-between">
+    <div class="city-container">
+      {% if weather_info1 %}
+      {% include 'city.html' with weather_info=weather_info1 forecasts_info=forecasts_info1 %}
+      {% endif %}
+    </div>
+    <div class="city-container">
+      {% if weather_info2 %}
+      {% include 'city.html' with weather_info=weather_info2 forecasts_info=forecasts_info2 %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
 
 {% endblock %}
