@@ -6,6 +6,9 @@ from .API_KEY import API_KEY
 from .forms import RegisterUserForm
 
 
+def homepage(request):
+    return render(request, 'homepage.html')
+
 
 def main(request):
     api_key = API_KEY
