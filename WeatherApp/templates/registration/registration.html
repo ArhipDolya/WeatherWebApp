@@ -28,7 +28,7 @@
             {{ form.password2|as_crispy_field }}
           </div>
           <button class="btn btn-primary btn-block" type="submit">Register</button>
-          <p class="text-center mt-3">If you already have an account <a href="#">login</a> instead</p>
+          <p class="text-center mt-3">If you already have an account <a href="{% url "user_login_view" %}">login</a> instead</p>
         </form>
       </div>
     </div>

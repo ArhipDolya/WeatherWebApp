@@ -2,8 +2,11 @@ import datetime
 import requests
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth import login, authenticate
+from django.urls import reverse 
 from .API_KEY import API_KEY
 from .forms import RegisterUserForm
+from django.contrib.auth.forms import AuthenticationForm 
 
 
 def homepage(request):
@@ -84,3 +87,25 @@ def user_registration_view(request):
 
     return render(request, 'registration/registration.html', {'form': form})
     
+
+def user_login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            password_confirmation = form.cleaned_data['password_confirmation']
+            user = authenticate(username=username, email=email, password=password, password_confirmation=password_confirmation)
+
+            if user is not None:
+                login(request, user)
+                messages.info(request, f"You are now logged in as {username}.")
+                return redirect('weather/')
+            else:
+                messages.error(request, "Invalid user !")
+        
+    else:
+        form = AuthenticationForm()
+
+    return render(request, 'registration/login.html', {'form': form})
