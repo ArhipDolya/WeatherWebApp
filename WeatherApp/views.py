@@ -1,8 +1,9 @@
 import datetime
 import requests
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from .API_KEY import API_KEY
+from .forms import RegisterUserForm
 
 
 
@@ -63,3 +64,20 @@ def get_weather_forecast(city, api_key, weather_url, forecast_url):
         })
 
     return weather_info, forecasts_list
+
+
+def user_registration_view(request):
+    if request.method == 'POST':
+        form = RegisterUserForm(request.POST)
+        
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Successful registration!')
+            return redirect('/')
+        else:
+            messages.error(request, "Unsuccessful registration. Invalid information.")
+    else:
+        form = RegisterUserForm()
+
+    return render(request, 'registration/registration.html', {'form': form})
+    

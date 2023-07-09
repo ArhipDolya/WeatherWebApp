@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Registration</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+
+<body>
+  {% load crispy_forms_tags %}  
+  <div class="container">
+    <div class="row justify-content-center mt-5">
+      <div class="col-md-6">
+        <h1 class="text-center mb-4">Registration</h1>
+        <form method="POST" action="{% url 'user_registration_view' %}">
+          {% csrf_token %}
+          <div class="form-group">
+            {{ form.username|as_crispy_field }}
+          </div>
+          <div class="form-group">
+            {{ form.email|as_crispy_field }}
+          </div>
+          <div class="form-group">
+            {{ form.password1|as_crispy_field }}
+          </div>
+          <div class="form-group">
+            {{ form.password2|as_crispy_field }}
+          </div>
+          <button class="btn btn-primary btn-block" type="submit">Register</button>
+          <p class="text-center mt-3">If you already have an account <a href="#">login</a> instead</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
