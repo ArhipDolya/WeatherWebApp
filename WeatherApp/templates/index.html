@@ -17,7 +17,6 @@
         <button type="submit" class="btn btn-primary">Compare Weather</button>
       </div>
     </form>
-
   </div>
 </div>
 
@@ -35,6 +34,51 @@
     </div>
   </div>
 </div>
+<style>
 
 
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    background: none;
+    border: 1px solid #a0b3b0;
+    color: #ffffff;
+    border-radius: 4px;
+    transition: border-color .25s ease, box-shadow .25s ease;
+  }
+
+  .form-control:focus {
+    outline: 0;
+    border-color: #1ab188;
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    background: #1ab188;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    transition: background-color .25s ease;
+  }
+
+  .btn-primary:hover,
+  .btn-primary:focus {
+    background: #179b77;
+    cursor: pointer;
+  }
+
+  .row.justify-content-center {
+    margin-top: 20px;
+  }
+
+  .city-container {
+    margin-top: 20px;
+  }
+</style>
 {% endblock %}
+

@@ -1,33 +1,142 @@
 {% extends 'base.html' %}
-
 {% block title %}
     <title>Login</title>
 {% endblock %}
-
 {% block link %}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-{% endblock %}
+    <style>
+        *,
+        *:before,
+        *:after {
+            box-sizing: border-box;
+        }
 
+        body {
+            background: #c1bdba;
+            font-family: 'Titillium Web', sans-serif;
+            overflow-y: scroll;
+        }
+
+        a {
+            text-decoration: none;
+            color: #1ab188;
+            transition: .5s ease;
+        }
+
+        a:hover {
+            color: #179b77;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffffff;
+            font-weight: 300;
+            margin-bottom: 40px;
+        }
+
+        form {
+            width: 100%;
+            padding: 20px;
+            background: rgba(19, 35, 47, 0.9);
+            border-radius: 4px;
+            box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            color: #ffffff;
+            font-size: 18px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            background: none;
+            border: 1px solid #a0b3b0;
+            color: #ffffff;
+            border-radius: 4px;
+            transition: border-color .25s ease, box-shadow .25s ease;
+        }
+
+        .form-group input:focus {
+            outline: 0;
+            border-color: #1ab188;
+        }
+
+        .btn-block {
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            background: #1ab188;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            transition: background-color .25s ease;
+        }
+
+        .btn-block:hover,
+        .btn-block:focus {
+            background: #179b77;
+            cursor: pointer;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-3 {
+            margin-top: 20px;
+        }
+
+        .mt-4 {
+            margin-top: 30px;
+        }
+
+        .mb-4 {
+            margin-bottom: 40px;
+        }
+    </style>
+{% endblock %}
 {% block content %}
 
-{% load crispy_forms_tags %}  
+{% load crispy_forms_tags %}
 
 <div class="container">
-    <div class="row justify-content-center mt-5">
-        <div class="col-md-6">
-            <h1 class="text-center">Login</h1>
-            <form method="post">
-                {% csrf_token %}
-                {{ form|crispy }}
-                <div class="text-center mt-3">
-                    <button class="btn btn-primary" type="submit">Login</button>
-                </div>
-            </form>
-            <p class="text-center mt-3">If you don't have an account <a href='{% url "user_registration_view" %}'>register</a> instead</p>
-            <div class='d-flex flex-column my-4'>
-                <a class='m-auto' href='{% url "password_reset" %}'>Reset password</a>
-            </div>
+    <h1>Login</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.username|as_crispy_field }}
         </div>
+        <div class="form-group">
+            {{ form.password|as_crispy_field }}
+        </div>
+        <button class="btn btn-block btn-primary" type="submit">Login</button>
+    </form>
+    <p class="text-center mt-3">If you don't have an account <a href='{% url "user_registration_view" %}'>register</a> instead</p>
+    <div class='d-flex flex-column my-4'>
+        <a class='m-auto' href='{% url "password_reset" %}'>Reset password</a>
     </div>
 </div>
 {% endblock %}
+
+
+
+
+
