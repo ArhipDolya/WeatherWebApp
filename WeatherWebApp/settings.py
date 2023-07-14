@@ -2,6 +2,7 @@ from pathlib import Path
 import os
 import django_heroku
 import dj_database_url
+from .GitHub_keys import CLIEND_ID_GITHUB, SECRET_GITHUB
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -16,7 +17,16 @@ SECRET_KEY = 'django-insecure-s$!keg2k4*#0lkull$9t1(xa5v0kpu_)ugn*a%vhbzn7b*_(vq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
+
+AUTHENTICATION_BACKENDS = (
+ #used for default signin such as loggin into admin panel
+ 'django.contrib.auth.backends.ModelBackend', 
+  
+ #used for social authentications
+ 'allauth.account.auth_backends.AuthenticationBackend',
+    )
 
 
 # Application definition
@@ -32,7 +42,43 @@ INSTALLED_APPS = [
     'rest_framework',
     'crispy_forms',
     'crispy_bootstrap4',
+
+    # Django-allauth
+
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google', #for google auth
+    'allauth.socialaccount.providers.github', #for google auth
 ]
+
+SITE_ID = 1
+
+
+
+#SOCIALACCOUNT_PROVIDERS = {
+#    'github': {
+#        'APP': {
+#            'client_id': CLIEND_ID_GITHUB,
+#            'secret': SECRET_GITHUB,
+#            'key': ''
+#        }
+#    }
+#}
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        },
+    }
+}
+
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -59,6 +105,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -116,9 +163,13 @@ STATIC_URL = 'static/'
 
 LOGIN_URL = '/login/'
 
+LOGIN_REDIRECT_URL = '/'
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'templates'),
 ]  
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
