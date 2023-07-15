@@ -57,16 +57,6 @@ SITE_ID = 1
 
 
 
-#SOCIALACCOUNT_PROVIDERS = {
-#    'github': {
-#        'APP': {
-#            'client_id': CLIEND_ID_GITHUB,
-#            'secret': SECRET_GITHUB,
-#            'key': ''
-#        }
-#    }
-#}
-
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'SCOPE': [
@@ -86,6 +76,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -147,7 +138,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru' #'en-us'
 
 TIME_ZONE = 'UTC'
 
@@ -178,3 +169,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = BASE_DIR / "emails"
+
+
+LANGUAGES = [
+    ('en', 'English'),
+    ('ru', 'Russian'),
+]

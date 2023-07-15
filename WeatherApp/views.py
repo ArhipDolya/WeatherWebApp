@@ -8,6 +8,12 @@ from .forms import RegisterUserForm
 from django.contrib.auth.forms import AuthenticationForm 
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password
+from django.utils.translation import gettext as _
+
+
+def local_test(request):
+    return render(request, 'local.html', {'hello': _('Hello')})
 
 
 def homepage(request):
@@ -83,7 +89,9 @@ def user_registration_view(request):
         form = RegisterUserForm(request.POST)
         
         if form.is_valid():
-            form.save()
+            user = form.save()
+            user.password = make_password(form.cleaned_data['password1'])
+            user.save()
             messages.success(request, 'Successful registration!')
             return redirect('/')
         else:
