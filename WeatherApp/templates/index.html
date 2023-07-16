@@ -2,6 +2,54 @@
 {% load static %}
 
 {% block content %}
+
+<style>
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    background: none;
+    border: 1px solid #a0b3b0;
+    color: #ffffff;
+    border-radius: 4px;
+    transition: border-color .25s ease, box-shadow .25s ease;
+  }
+  
+  .form-control:focus {
+    outline: 0;
+    border-color: #1ab188;
+  }
+  
+  .btn-primary {
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    background: #1ab188;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    transition: background-color .25s ease;
+  }
+  
+  .btn-primary:hover,
+  .btn-primary:focus {
+    background: #179b77;
+    cursor: pointer;
+  }
+  
+  .row.justify-content-center {
+    margin-top: 20px;
+  }
+  
+  .city-container {
+    margin-top: 20px;
+  }
+  </style>
+
+
+<canvas id="weatherChart"></canvas>
 <br><br>
 <div class="row justify-content-center">
   <div class="col-md-6">
@@ -35,49 +83,47 @@
   </div>
 </div>
 
-<style>
-.form-control {
-  width: 100%;
-  padding: 10px;
-  background: none;
-  border: 1px solid #a0b3b0;
-  color: #ffffff;
-  border-radius: 4px;
-  transition: border-color .25s ease, box-shadow .25s ease;
-}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Fetch the necessary data from your view or API
+        const weatherData = JSON.parse('{{ weather_data_json|safe }}');
 
-.form-control:focus {
-  outline: 0;
-  border-color: #1ab188;
-}
+        // Prepare the data for the chart
+        const labels = weatherData.forecasts.map(forecast => forecast.day);
+        const minTemps = weatherData.forecasts.map(forecast => forecast.min_temp);
+        const maxTemps = weatherData.forecasts.map(forecast => forecast.max_temp);
 
-.btn-primary {
-  width: 100%;
-  padding: 10px;
-  font-size: 18px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: .1em;
-  background: #1ab188;
-  color: #ffffff;
-  border: none;
-  border-radius: 4px;
-  transition: background-color .25s ease;
-}
+        // Create the weather chart
+        const ctx = document.getElementById('weatherChart').getContext('2d');
+        const weatherChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Min Temperature (°C)',
+                        data: minTemps,
+                        borderColor: 'blue',
+                        backgroundColor: 'rgba(0, 0, 255, 0.2)',
+                    },
+                    {
+                        label: 'Max Temperature (°C)',
+                        data: maxTemps,
+                        borderColor: 'red',
+                        backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                    },
+                },
+            },
+        });
+</script>
 
-.btn-primary:hover,
-.btn-primary:focus {
-  background: #179b77;
-  cursor: pointer;
-}
-
-.row.justify-content-center {
-  margin-top: 20px;
-}
-
-.city-container {
-  margin-top: 20px;
-}
-</style>
 {% endblock %}
   

@@ -1,5 +1,6 @@
 import datetime
 import requests
+import json
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
@@ -11,9 +12,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from django.utils.translation import gettext as _
 
-
-def local_test(request):
-    return render(request, 'local.html', {'hello': _('Hello')})
 
 
 def homepage(request):
@@ -41,6 +39,10 @@ def weather_view(request):
             'forecasts_info1': forecasts_info1,
             'weather_info2': weather_info2,
             'forecasts_info2': forecasts_info2,
+            'weather_data_json': json.dumps({
+                'forecasts': forecasts_info1
+            }
+            )
         }
 
         return render(request, 'index.html', content)
