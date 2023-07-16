@@ -1,12 +1,14 @@
 import datetime
 import requests
 import json
+from .API_KEY import API_KEY
+from .forms import RegisterUserForm, FavoriteCityForm
+from .models import FavoriteCity
+
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import login, authenticate
-from .API_KEY import API_KEY
-from .forms import RegisterUserForm
-from django.contrib.auth.forms import AuthenticationForm 
+from django.contrib.auth import login, authenticate, get_user_model
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
@@ -24,32 +26,44 @@ def weather_view(request):
     forecast_url = 'https://api.openweathermap.org/data/2.5/onecall?lat={}&lon={}&exlude=current,minutely,hourly,alerts&appid={}'
 
     if request.method == 'POST':
-        city1 = request.POST['city1']
-        city2 = request.POST.get('city2', None)
 
-        weather_info1, forecasts_info1 = get_weather_forecast(city1, API_KEY, weather_url, forecast_url)
+        if 'add_city' in request.POST:
+            favorite_city = request.POST['favorite_city']
+            # Save city1 as a favorite for the current user
+            if not FavoriteCity.objects.filter(user=request.user, city_name=favorite_city).exists():
+                favorite_city1 = FavoriteCity.objects.create(user=request.user, city_name=favorite_city)
 
-        if city2:
-            weather_info2, forecasts_info2 = get_weather_forecast(city2, API_KEY, weather_url, forecast_url)
-        else:
-            weather_info2, forecasts_info2 = None, None
+        elif 'compare_weather' in request.POST:
+            city1 = request.POST['city1']
+            city2 = request.POST.get('city2', None)
 
-        content = {
-            'weather_info1': weather_info1,
-            'forecasts_info1': forecasts_info1,
-            'weather_info2': weather_info2,
-            'forecasts_info2': forecasts_info2,
-            'weather_data_json': json.dumps({
-                'forecasts': forecasts_info1
+            weather_info1, forecasts_info1 = get_weather_forecast(city1, API_KEY, weather_url, forecast_url)
+
+            if city2:
+                weather_info2, forecasts_info2 = get_weather_forecast(city2, API_KEY, weather_url, forecast_url)
+            else:
+                weather_info2, forecasts_info2 = None, None
+
+            content = {
+                'weather_info1': weather_info1,
+                'forecasts_info1': forecasts_info1,
+                'weather_info2': weather_info2,
+                'forecasts_info2': forecasts_info2,
+                'weather_data_json': json.dumps({
+                    'forecasts': forecasts_info1
+                }),
+                'favorite_cities': request.user.favoritecity_set.all(),
             }
-            )
-        }
 
-        return render(request, 'index.html', content)
+            return render(request, 'index.html', content)
 
-    else:
-        return render(request, 'index.html')
-    
+    content = {
+        'favorite_cities': request.user.favoritecity_set.all(),
+    }
+
+    return render(request, 'index.html', content)
+
+
 
 def get_weather_forecast(city, api_key, weather_url, forecast_url):
     response = requests.get(weather_url.format(city, api_key)).json()

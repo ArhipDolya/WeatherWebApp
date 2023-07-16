@@ -46,23 +46,53 @@
   .city-container {
     margin-top: 20px;
   }
-  </style>
-
+</style>
 
 <canvas id="weatherChart"></canvas>
 <br><br>
+
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <h3>Favorite Cities:</h3>
+    <ul>
+      {% for city in favorite_cities %}
+      <li>
+        {{ city.city_name }}
+      </li>
+      {% empty %}
+        <li>No favorite cities saved yet</li>
+      {% endfor %}
+    </ul>
+
+    <h3>Add a Favorite City:</h3>
+    <form method='POST'>
+      {% csrf_token %}
+      <div class="form-group">
+        <input type='text' name='favorite_city' class='form-control' placeholder='Enter a city:' style='color:green;'>
+      </div>
+      <div class="form-group text-center">
+        <button type='submit' class='btn btn-primary' name="add_city">
+          Add City
+        </button>
+      </div>
+    </form>
+  </div>
+</div><br><br>
+
 <div class="row justify-content-center">
   <div class="col-md-6">
     <form method="post">
       {% csrf_token %}
       <div class="form-group">
-        <input type="text" name="city1" class="form-control" placeholder="Enter a city 1">
+        <input type="text" name="city1" class="form-control" placeholder="Enter a city 1" style='color:green;'>
       </div>
       <div class="form-group">
-        <input type="text" name="city2" class="form-control" placeholder="Enter a city 2">
+        <input type="text" name="city2" class="form-control" placeholder="Enter a city 2" style='color:green;'>
       </div>
       <div class="form-group text-center">
-        <button type="submit" class="btn btn-primary">Compare Weather</button>
+        <button type="submit" class="btn btn-primary" name="compare_weather">
+          Compare Weather
+        </button>
       </div>
     </form>
   </div>
@@ -84,46 +114,45 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // Fetch the necessary data from your view or API
-        const weatherData = JSON.parse('{{ weather_data_json|safe }}');
+<script>
+  // Fetch the necessary data from your view or API
+  const weatherData = JSON.parse('{{ weather_data_json|safe }}');
 
-        // Prepare the data for the chart
-        const labels = weatherData.forecasts.map(forecast => forecast.day);
-        const minTemps = weatherData.forecasts.map(forecast => forecast.min_temp);
-        const maxTemps = weatherData.forecasts.map(forecast => forecast.max_temp);
+  // Prepare the data for the chart
+  const labels = weatherData.forecasts.map(forecast => forecast.day);
+  const minTemps = weatherData.forecasts.map(forecast => forecast.min_temp);
+  const maxTemps = weatherData.forecasts.map(forecast => forecast.max_temp);
 
-        // Create the weather chart
-        const ctx = document.getElementById('weatherChart').getContext('2d');
-        const weatherChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: 'Min Temperature (°C)',
-                        data: minTemps,
-                        borderColor: 'blue',
-                        backgroundColor: 'rgba(0, 0, 255, 0.2)',
-                    },
-                    {
-                        label: 'Max Temperature (°C)',
-                        data: maxTemps,
-                        borderColor: 'red',
-                        backgroundColor: 'rgba(255, 0, 0, 0.2)',
-                    },
-                ],
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                    },
-                },
-            },
-        });
+  // Create the weather chart
+  const ctx = document.getElementById('weatherChart').getContext('2d');
+  const weatherChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Min Temperature (°C)',
+          data: minTemps,
+          borderColor: 'blue',
+          backgroundColor: 'rgba(0, 0, 255, 0.2)',
+        },
+        {
+          label: 'Max Temperature (°C)',
+          data: maxTemps,
+          borderColor: 'red',
+          backgroundColor: 'rgba(255, 0, 0, 0.2)',
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
 </script>
 
 {% endblock %}
-  
