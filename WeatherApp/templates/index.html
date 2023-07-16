@@ -17,6 +17,7 @@
   .form-control:focus {
     outline: 0;
     border-color: #1ab188;
+    box-shadow: 0 0 0 0.2rem rgba(26, 177, 136, 0.25);
   }
   
   .btn-primary {
@@ -45,6 +46,36 @@
   
   .city-container {
     margin-top: 20px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .favorite-cities {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 10px;
+  }
+  
+  .favorite-cities li {
+    margin-bottom: 5px;
+  }
+  
+  .no-cities {
+    color: #666666;
+    font-style: italic;
+  }
+  
+  .city-input {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .city-input input[type="text"] {
+    flex-grow: 1;
+    margin-right: 10px;
   }
 </style>
 
@@ -54,23 +85,21 @@
 <div class="row justify-content-center">
   <div class="col-md-6">
     <h3>Favorite Cities:</h3>
-    <ul>
+    <ul class="favorite-cities">
       {% for city in favorite_cities %}
       <li>
         {{ city.city_name }}
       </li>
       {% empty %}
-        <li>No favorite cities saved yet</li>
+        <li class="no-cities">No favorite cities saved yet</li>
       {% endfor %}
     </ul>
 
     <h3>Add a Favorite City:</h3>
     <form method='POST'>
       {% csrf_token %}
-      <div class="form-group">
-        <input type='text' name='favorite_city' class='form-control' placeholder='Enter a city:' style='color:green;'>
-      </div>
-      <div class="form-group text-center">
+      <div class="city-input">
+        <input type='text' name='favorite_city' class='form-control' placeholder='Enter a city:'>
         <button type='submit' class='btn btn-primary' name="add_city">
           Add City
         </button>
@@ -84,10 +113,10 @@
     <form method="post">
       {% csrf_token %}
       <div class="form-group">
-        <input type="text" name="city1" class="form-control" placeholder="Enter a city 1" style='color:green;'>
+        <input type="text" name="city1" class="form-control" placeholder="Enter a city 1">
       </div>
       <div class="form-group">
-        <input type="text" name="city2" class="form-control" placeholder="Enter a city 2" style='color:green;'>
+        <input type="text" name="city2" class="form-control" placeholder="Enter a city 2">
       </div>
       <div class="form-group text-center">
         <button type="submit" class="btn btn-primary" name="compare_weather">
@@ -97,6 +126,8 @@
     </form>
   </div>
 </div>
+
+
 
 <div class="row justify-content-center">
   <div class="col-md-6 d-flex justify-content-between">
