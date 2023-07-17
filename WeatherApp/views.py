@@ -1,6 +1,7 @@
 import datetime
 import requests
 import json
+import axios    
 from .API_KEY import API_KEY
 from .forms import RegisterUserForm, FavoriteCityForm
 from .models import FavoriteCity
@@ -26,6 +27,24 @@ def weather_view(request):
     forecast_url = 'https://api.openweathermap.org/data/2.5/onecall?lat={}&lon={}&exlude=current,minutely,hourly,alerts&appid={}'
 
     if request.method == 'POST':
+
+        if 'latitude' in request.POST and 'longitude' in request.POST:
+            latitude = request.POST['latitude']
+            longitude = request.POST['longitude']
+
+            reverse_geocoding_url = f"https://api.openweathermap.org/geo/1.0/reverse?lat={latitude}&lon={longitude}&limit=1&appid={api_key}"
+            reverse_geocoding_response = requests.get(reverse_geocoding_url).json()
+
+            if reverse_geocoding_response:
+                city = reverse_geocoding_response[0].get('name')
+                if city:
+                    weather_info, forecasts_info = get_weather_forecast(city, api_key, weather_url, forecast_url)
+                    content = {
+                        'weather_info1': weather_info,
+                        'forecasts_info1': forecasts_info,
+                        'favorite_cities': request.user.favoritecity_set.all(),
+                    }
+                    return render(request, 'weather_page.html', content)
 
         if 'add_city' in request.POST:
             favorite_city = request.POST['favorite_city']
@@ -55,13 +74,13 @@ def weather_view(request):
                 'favorite_cities': request.user.favoritecity_set.all(),
             }
 
-            return render(request, 'index.html', content)
+            return render(request, 'weather_page.html', content)
 
     content = {
         'favorite_cities': request.user.favoritecity_set.all(),
     }
 
-    return render(request, 'index.html', content)
+    return render(request, 'weather_page.html', content)
 
 
 

@@ -77,6 +77,28 @@
     flex-grow: 1;
     margin-right: 10px;
   }
+  
+  .alert-list {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  .alert-list li {
+    background-color: #fff;
+    border: 1px solid #e8e8e8;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  
+  .alert-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .alert-description {
+    margin-bottom: 0;
+  }
 </style>
 
 <canvas id="weatherChart"></canvas>
@@ -128,7 +150,6 @@
 </div>
 
 
-
 <div class="row justify-content-center">
   <div class="col-md-6 d-flex justify-content-between">
     <div class="city-container">
@@ -143,6 +164,22 @@
     </div>
   </div>
 </div>
+
+{% if weather_alerts %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <h3>Weather Alerts:</h3>
+    <ul class="alert-list">
+      {% for alert in weather_alerts %}
+      <li>
+        <p class="alert-title">{{ alert.event }}</p>
+        <p class="alert-description">{{ alert.description }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endif %}
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -184,6 +221,48 @@
       },
     },
   });
+  
+
+  $(document).ready(function() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+    }
+  
+    function successCallback(position) {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+  
+      // Makes an AJAX request to Django view with the latitude and longitude
+      const url = "{% url 'weather' %}";
+      const data = {
+        latitude: latitude,
+        longitude: longitude
+      };
+  
+      // Perform AJAX request using a library like Axios or jQuery
+      axios.post(url, data)
+        .then(response => {
+          // Handles the response from the server
+          const weatherInfo = response.data.weather_info1;
+          const forecastsInfo = response.data.forecasts_info1;
+  
+          // Update the necessary elements in the DOM with the retrieved data
+          // Example:
+          document.getElementById('city-name').textContent = weatherInfo.city;
+          document.getElementById('temperature').textContent = weatherInfo.temperature;
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
+  
+    function errorCallback(error) {
+      // Handles geolocation error
+      console.error(error);
+    }
+  });
+
 </script>
+
 
 {% endblock %}
