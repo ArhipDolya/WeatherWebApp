@@ -1,7 +1,6 @@
 import datetime
 import requests
-import json
-import axios    
+import json 
 from .API_KEY import API_KEY
 from .forms import RegisterUserForm, FavoriteCityForm
 from .models import FavoriteCity
@@ -19,6 +18,7 @@ from django.utils.translation import gettext as _
 
 def homepage(request):
     return render(request, 'homepage.html')
+
 
 @login_required
 def weather_view(request):

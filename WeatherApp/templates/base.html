@@ -10,36 +10,11 @@
     {% endblock %}
     {% block link %}
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel='stylesheet' href="{% static 'WeatherApp/css/dark.css' %}">
     {% endblock %}
-
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'en,ru,uk', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
-        }
-    </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </head>
 <body>
-
-    <style>
-        .goog-te-banner-frame { display: none !important; }
-        .goog-te-menu-value:hover { text-decoration: none !important; }
-        .goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
-        .goog-tooltip { display: none !important; }
-        .goog-tooltip:hover { text-decoration: none !important; }
-        .goog-tooltip:hover span { text-decoration: underline !important; }
-        .goog-tooltip span:first-child { display: none !important; }
-        .goog-tooltip span:last-child { display: inline !important; }
-        .goog-tooltip:hover span:first-child { display: inline !important; }
-    
-        #google_translate_element {
-            position: absolute;
-            top: 100px;
-            right: 10px;
-        }
-    </style>
-
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="{% url 'homepage' %}">Weather WebApp</a>
@@ -74,6 +49,14 @@
         </div>
     </nav>
 
+    <div class='wrapper-color-switch'>
+        <input type='checkbox' id='input-color-switch'>
+        <label for='input-color-switch' class='color-switch'>
+            <div class='color-switch-toggle'></div>
+        </label>
+        <span class="color-text">Switch to Dark Mode</span>
+    </div>
+
     <div class="container">
         {% block content %}
 
@@ -84,6 +67,140 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-CLfZ6tuBo1jAWBzhwoRFX9OBnRDG4VgGsLqD+jgOzLkfwB6qIv2AM+L5zKXpR1DU" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     
+    <script type='text/javascript'>
+        const colorSwitch = document.getElementById('input-color-switch');
+        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+        // Set initial state based on localStorage value
+        if (isDarkMode) {
+            document.body.classList.add('dark-mode');
+            colorSwitch.checked = true;
+        }
+
+        colorSwitch.addEventListener('click', isClicked);
+
+        function isClicked() {
+            if (colorSwitch.checked) {
+                darkModeOn();
+                localStorage.setItem('darkMode', 'true');
+            } else {
+                lightModeOn();
+                localStorage.setItem('darkMode', 'false');
+            }
+        }
+
+        function darkModeOn() {
+            document.body.classList.add('dark-mode');
+        }
+
+        function lightModeOn() {
+            document.body.classList.remove('dark-mode');
+        }
+    </script>
+
+
+
+    <div class="translate-container">
+        <script type="text/javascript">
+            function googleTranslateElementInit() {
+                new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'en,ru,uk', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
+            }
+        </script>
+        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+        <div id="google_translate_element" class="translate-text"></div>
+    </div>
+
+
+
+    <style>
+        .goog-te-banner-frame { display: none !important; }
+        .goog-te-menu-value:hover { text-decoration: none !important; }
+        .goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
+        .goog-tooltip { display: none !important; }
+        .goog-tooltip:hover { text-decoration: none !important; }
+        .goog-tooltip:hover span { text-decoration: underline !important; }
+        .goog-tooltip span:first-child { display: none !important; }
+        .goog-tooltip span:last-child { display: inline !important; }
+        .goog-tooltip:hover span:first-child { display: inline !important; }
+    
+
+        #google_translate_element {
+            display: flex;
+            align-items: center;
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+    
+        .translate-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+
+        .translate-text {
+            color: red; /* You can change this color if needed */
+        }
+        
+
+        body.dark-mode {
+            background-color: #263238;
+            color: white;
+        }
+        
+        #input-color-switch {
+            display: none;
+        }
+        
+        /* Style the color switch container */
+        .wrapper-color-switch {
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Style the color switch label */
+        .color-switch {
+            width: 60px;
+            height: 30px;
+            border-radius: 30px;
+            background-color: #e5e5e5;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        /* Style the color switch toggle */
+        .color-switch-toggle {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background-color: #ffffff;
+            transition: transform 0.3s ease;
+        }
+        
+        /* Styling for when the switch is toggled on (dark mode) */
+        #input-color-switch:checked + .color-switch .color-switch-toggle {
+            transform: translateX(30px);
+            background-color: #343a40; /* Dark background color */
+        }
+        
+        /* Optional: Add some text to indicate dark/light mode */
+        .color-text {
+            margin-left: 10px;
+        }
+        
+    </style>
+
+
     <div id="google_translate_element"></div>
 
 </body>
