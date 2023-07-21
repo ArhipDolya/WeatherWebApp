@@ -93,7 +93,9 @@ def get_weather_forecast(city, api_key, weather_url, forecast_url):
 
     lat = response['coord']['lat']
     lon = response['coord']['lon']
+
     forecast_response = requests.get(forecast_url.format(lat, lon, api_key)).json()
+
     temperature_in_celsius = round(response['main']['temp'] - 273.15, 2)
     weather_description = response['weather'][0]['description']
     weather_icon = response['weather'][0]['icon']
@@ -107,17 +109,17 @@ def get_weather_forecast(city, api_key, weather_url, forecast_url):
 
     forecasts_list = []
 
-    for forecast in forecast_response['daily'][:5]:
-        forecasts_list.append({
-            'day': datetime.datetime.fromtimestamp(forecast['dt']).strftime('%A'),
-            'min_temp': round(forecast['temp']['min'] - 273.15, 2),
-            'max_temp': round(forecast['temp']['max'] - 273.15, 2),
-            'description': forecast['weather'][0]['description'],
-            'icon': forecast['weather'][0]['icon']
-        })
+    if 'daily' in forecast_response:
+        for forecast in forecast_response['daily'][:5]:
+            forecasts_list.append({
+                'day': datetime.datetime.fromtimestamp(forecast['dt']).strftime('%A'),
+                'min_temp': round(forecast['temp']['min'] - 273.15, 2),
+                'max_temp': round(forecast['temp']['max'] - 273.15, 2),
+                'description': forecast['weather'][0]['description'],
+                'icon': forecast['weather'][0]['icon']
+            })
 
     return weather_info, forecasts_list
-
 
 def user_registration_view(request):
     if request.method == 'POST':
