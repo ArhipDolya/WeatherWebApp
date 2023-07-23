@@ -14,10 +14,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-s$!keg2k4*#0lkull$9t1(xa5v0kpu_)ugn*a%vhbzn7b*_(vq'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# SECURITY WARNING: don't run with debug turned on in produ ction!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '.vercel.app']
 
 
 AUTHENTICATION_BACKENDS = (
@@ -159,7 +159,7 @@ LOGIN_REDIRECT_URL = '/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
+    os.path.join(BASE_DIR, 'static')    
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

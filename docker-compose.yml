@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  django:
+    image: django-docker:0.0.1
+    build: .
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/django
+    container_name: django_container
+    command: python manage.py runserver 0.0.0.0:8000
