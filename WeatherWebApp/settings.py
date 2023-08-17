@@ -3,6 +3,7 @@ import os
 import django_heroku
 import dj_database_url
 from .GitHub_keys import CLIEND_ID_GITHUB, SECRET_GITHUB
+from .django_keys import SECRET_KEY
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -12,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-s$!keg2k4*#0lkull$9t1(xa5v0kpu_)ugn*a%vhbzn7b*_(vq'
+SECRET_KEY = SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in produ ction!
 DEBUG = True
@@ -50,7 +51,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google', #for google auth
-    'allauth.socialaccount.providers.github', #for google auth
+    'allauth.socialaccount.providers.github', #for github auth
 ]
 
 SITE_ID = 1
